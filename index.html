@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Practical Machine Learning - Peer Assessments</title>
+  <meta name="Author" content="ffamorim">
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1265.21">
+  <style type="text/css">
+    p.p4 {margin: 0.0px 0.0px 10.0px 0.0px; font: 9.0px Times; color: #333333}
+    p.p6 {margin: 0.0px 0.0px 10.0px 0.0px; font: 14.0px Times; color: #333333}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #333333; background-color: #f5f5f5}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #333333; background-color: #ffffff}
+    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #007020; background-color: #f5f5f5}
+    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #60a0b0; background-color: #f5f5f5}
+    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #333333; background-color: #f5f5f5; min-height: 14.0px}
+    p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #4070a0; background-color: #f5f5f5}
+    p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Courier; color: #902000; background-color: #f5f5f5}
+    li.li3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Times; color: #dd4814}
+    span.s1 {color: #dd4814}
+    span.s2 {text-decoration: underline}
+    span.s3 {color: #007020}
+    span.s4 {color: #902000}
+    span.s5 {color: #4070a0}
+    span.s6 {color: #333333}
+    span.s7 {color: #40a070}
+    span.s8 {color: #60a0b0}
+    ul.ul1 {list-style-type: disc}
+    ul.ul2 {list-style-type: circle}
+  </style>
+</head>
+<body>
+<h1 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 39.0px Times; color: #333333"><b>Practical Machine Learning - Peer Assessments</b></h1>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 18.0px Times; color: #333333"><b><i>ffamorim</i></b></h4>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 18.0px Times; color: #333333"><b><i>Sunday, September 14, 2014</i></b></h4>
+<ul class="ul1">
+  <li class="li3">Executive Summary</li>
+  <li class="li3">Requisites of This Assignment</li>
+  <li class="li3">Prepare the Environment</li>
+  <ul class="ul2">
+    <li class="li3">Load libraries and Set Seed</li>
+  </ul>
+  <li class="li3">Loading and Preprocessing the Data</li>
+  <ul class="ul2">
+    <li class="li3">Function definitions and load libraries code segment</li>
+  </ul>
+  <li class="li3">Data Getting and Cleanning:</li>
+  <ul class="ul2">
+    <li class="li3">Assign the directory that all data set was found and confirm its exists</li>
+    <li class="li3">Data Sets Partitions Definitions</li>
+  </ul>
+  <li class="li3">Data Exploration and Clenning</li>
+  <li class="li3">Modeling</li>
+  <ul class="ul2">
+    <li class="li3">Model Evaluate</li>
+    <li class="li3">Model Test</li>
+  </ul>
+</ul>
+<p class="p4">Created with knitr in R x64 3.1.0 Patched on Windows 7 64 bits SO</p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Executive Summary</b></h2>
+<p class="p6">This document presents the results of the Practical Machine Learning Peer Assessments in a report using <b>a single R markdown document</b> that can be processed by <b>knitr</b> and be transformed into an HTML file.</p>
+<p class="p6">Since we have a data set with to many columns and we need make a class prediction, we decide implement a random forests model, that’s no need cross-validation or a separate test set to get an unbiased estimate of the test set error. Before apply the dataset to our prediction modelo, we decide remove all the columns that having less than 60% of data filled, instead try to filled it with some center measure. Our model accuracy over validation dataset is equal to 99.9235%. This model promoted a excelente prediction results with our testing dataset and generated the 20th files answers to submit for the Assignments. The Assignments returned to us that he 20th files answers as being correct!</p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Requisites of This Assignment</b></h2>
+<p class="p6">This assignment instructions request to: 1. predict the manner in which they did the exercise. This is the “classe” variable in the training set. All other variables can be use as predictor. 2. Shwo how I built my model, how I used cross validation, what I think the expected out of sample error is, and why I made the choices I did. 3. This prediction model alsi to predict 20 different test cases from the test data are available here: <a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"><span class="s1">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</span></a></p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Prepare the Environment</b></h2>
+<p class="p6">Throughout this report you can always find the code that I used to generate my output presents here. When writing code chunks in the R markdown document, <b>always use echo = TRUE</b> so that someone else will be able to read the code. This assignment will be evaluated via peer assessment so <span class="s2">it’s essential that my peer evaluators be able to review my code and my analysis together.</span>.</p>
+<p class="p6">First, we set echo equal a <b>TRUE</b> and results equal a <b>‘hold’</b> as global options for this document.</p>
+<p class="p7"><span class="s3"><b>library</b></span>(knitr)</p>
+<p class="p8">## Warning: package 'knitr' was built under R version 3.1.1</p>
+<p class="p7">opts_chunk$<span class="s3"><b>set</b></span>(<span class="s4">echo =</span> <span class="s3">TRUE</span>, <span class="s4">results =</span> <span class="s5">'hold'</span>)</p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Load libraries and Set Seed</b></h3>
+<p class="p6">Load all libraries used, and setting seed for reproducibility. <i>Results Hidden, Warnings FALSE and Messages FALSE</i></p>
+<p class="p7"><span class="s3"><b>library</b></span>(ElemStatLearn)</p>
+<p class="p7"><span class="s3"><b>library</b></span>(caret)</p>
+<p class="p7"><span class="s3"><b>library</b></span>(rpart)</p>
+<p class="p7"><span class="s3"><b>library</b></span>(randomForest)</p>
+<p class="p10"><b>set.seed</b><span class="s6">(</span><span class="s7">357</span><span class="s6">)</span></p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Loading and Preprocessing the Data</b></h2>
+<p class="p6">This assignment makes use of data from a personal activity monitoring device. The data come from this source: <a href="http://groupware.les.inf.puc-rio.br/har"><span class="s1">http://groupware.les.inf.puc-rio.br/har</span></a>.</p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Function definitions and load libraries code segment</b></h3>
+<p class="p6">First we define a function to check if the files exists in the path defined by file_path. If don’t exists stops execution of the current expression, and executes an error action</p>
+<p class="p7">check_file_exist &lt;-<span class="s5"> </span>function(file_path)<span class="Apple-converted-space"> </span></p>
+<p class="p7">{</p>
+<p class="p7"><span class="Apple-converted-space">        </span>if (!<span class="s3"><b>file.exists</b></span>(file_path))</p>
+<p class="p7"><span class="Apple-converted-space">                </span><span class="s3"><b>stop</b></span>(<span class="s5">"The "</span>, file_path, <span class="s5">" not found!"</span>) else <span class="s3">TRUE</span><span class="Apple-converted-space"> </span></p>
+<p class="p7">}</p>
+<p class="p6">Next, we use data set and data_dir to define the file_path, call the check_file_exist function to check and finally returned with data set load to data variable.</p>
+<p class="p7">load_data &lt;-<span class="s5"> </span>function(data_dir , fileURL, fileSource)<span class="Apple-converted-space"> </span></p>
+<p class="p7">{</p>
+<p class="p11"><span class="s6"><span class="Apple-converted-space">        </span></span><i># Dataset check and load<span class="Apple-converted-space"> </span></i></p>
+<p class="p12"><span class="Apple-converted-space">        </span></p>
+<p class="p7"><span class="Apple-converted-space">        </span>source_path &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>, fileSource , <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p7"><span class="Apple-converted-space">        </span>txt_file &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>,<span class="s5">"activity.csv"</span>, <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p12"><br></p>
+<p class="p7"><span class="Apple-converted-space">        </span>if (!<span class="s3"><b>file.exists</b></span>(txt_file)) {</p>
+<p class="p13"><span class="s6"><span class="Apple-converted-space">             </span></span><span class="s3"><b>message</b></span><span class="s6">(</span><span class="s3"><b>paste</b></span><span class="s6">(</span>"Please Wait! Download..."<span class="s6">, fileURL, </span>"..."<span class="s6">));</span></p>
+<p class="p7"><span class="Apple-converted-space">             </span><span class="s3"><b>download.file</b></span>(fileURL, <span class="s4">destfile=</span>source_path);</p>
+<p class="p7"><span class="Apple-converted-space">        </span>}<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="Apple-converted-space">        </span>data &lt;-<span class="s5"> </span><span class="s3"><b>read.csv</b></span>(txt_file,</p>
+<p class="p7"><span class="Apple-converted-space">                         </span><span class="s4">header=</span><span class="s3">TRUE</span>,<span class="Apple-converted-space">  </span><span class="s4">na.strings=</span><span class="s3"><b>c</b></span>(<span class="s5">"NA"</span>,<span class="s5">""</span>))</p>
+<p class="p7"><span class="Apple-converted-space">        </span>data$interval &lt;-<span class="s5"> </span><span class="s3"><b>factor</b></span>(data$interval)</p>
+<p class="p7"><span class="Apple-converted-space">        </span>data$date &lt;-<span class="s5"> </span><span class="s3"><b>as.Date</b></span>(data$date, <span class="s4">format=</span><span class="s5">"%Y-%m-%d"</span>)</p>
+<p class="p7"><span class="Apple-converted-space">        </span>data <span class="Apple-converted-space">       </span></p>
+<p class="p12"><span class="Apple-converted-space">        </span></p>
+<p class="p7">}</p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Data Getting and Cleanning:</b></h2>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Assign the directory that all data set was found and confirm its exists</b></h3>
+<p class="p6">Maybe you need to change this data_dir variable to yours core directory (see getwd() at a R consuole), because the line code here that ask you inform where the data directory is find, use readline function, and it’s not function at markdown documents.</p>
+<p class="p13"><span class="s6">data_dir &lt;-</span> "C:/Users/ffamorim/Documents/PML_PA/Data"<span class="s6">;</span></p>
+<p class="p6">Check if the “./Data” directory exists, if doesn’t ask to user the path of his data directory. If user inform a invalid directory path stops execution of the current expression and executes an error action.</p>
+<p class="p7">if (!<span class="s3"><b>file.exists</b></span>(data_dir)){</p>
+<p class="p11"><span class="s6"><span class="Apple-converted-space">        </span></span><i># data_dir &lt;- readline(prompt = "Please, inform your data directory path: ")</i></p>
+<p class="p7"><span class="Apple-converted-space">        </span>data_dir &lt;-<span class="s5">"./PML_PA/Data"</span> ## simulate a valid data entry just because we use a Rmd</p>
+<p class="p7"><span class="Apple-converted-space">        </span>if (!<span class="s3"><b>file.exists</b></span>(data_dir)){</p>
+<p class="p13"><span class="s6"><span class="Apple-converted-space">                </span></span><span class="s3"><b>stop</b></span><span class="s6">(</span>"You inform a invalid directory path"<span class="s6">)</span></p>
+<p class="p7"><span class="Apple-converted-space">        </span>}</p>
+<p class="p7">}</p>
+<p class="p6">Here its rely the point at the all data load and preparation is call and running.</p>
+<p class="p13"><span class="s6">fileURL &lt;-</span> "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"<span class="s6"><span class="Apple-converted-space"> </span></span></p>
+<p class="p13"><span class="s6">fileSource &lt;-</span>"pml-training.csv"</p>
+<p class="p7">source_path &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>, fileSource , <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p7">txt_file &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>, fileSource, <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p12"><br></p>
+<p class="p7"><span class="Apple-converted-space">        </span>if (!<span class="s3"><b>file.exists</b></span>(txt_file)) {</p>
+<p class="p13"><span class="s6"><span class="Apple-converted-space">            </span></span><span class="s3"><b>message</b></span><span class="s6">(</span><span class="s3"><b>paste</b></span><span class="s6">(</span>"Please Wait! Download..."<span class="s6">, fileURL, </span>"..."<span class="s6">));</span></p>
+<p class="p7"><span class="Apple-converted-space">            </span><span class="s3"><b>download.file</b></span>(fileURL, <span class="s4">destfile=</span>source_path);</p>
+<p class="p7"><span class="Apple-converted-space">        </span>}</p>
+<p class="p7">pml_CSV &lt;-<span class="s5"> </span><span class="s3"><b>read.csv</b></span>(txt_file, <span class="s4">header=</span><span class="s3">TRUE</span>, <span class="s4">sep=</span><span class="s5">","</span>, <span class="s4">na.strings=</span><span class="s3"><b>c</b></span>(<span class="s5">"NA"</span>,<span class="s5">""</span>))</p>
+<p class="p11"><span class="s6">pml_CSV &lt;-</span><span class="s5"> </span><span class="s6">pml_CSV[,-</span><span class="s7">1</span><span class="s6">] </span><i># Remove the first column that represents a ID Row</i></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Data Sets Partitions Definitions</b></h3>
+<p class="p6">Create the data partitions of training and validating data sets.</p>
+<p class="p7">inTrain =<span class="s5"> </span><span class="s3"><b>createDataPartition</b></span>(pml_CSV$classe, <span class="s4">p=</span><span class="s7">0.60</span>, <span class="s4">list=</span><span class="s3">FALSE</span>)</p>
+<p class="p7">training =<span class="s5"> </span>pml_CSV[inTrain,]</p>
+<p class="p7">validating =<span class="s5"> </span>pml_CSV[-inTrain,]</p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Data Exploration and Clenning</b></h2>
+<p class="p6">Since we choose a random forest model and we have a data set with to many columns, first we check if we have many problems with columns without data. If it’s the case we decide remove all the columns that having less than 60% of data filled, instead try to filled with some center measure.</p>
+<p class="p7"><span class="s3"><b>sum</b></span>((<span class="s3"><b>colSums</b></span>(!<span class="s3"><b>is.na</b></span>(training[,-<span class="s3"><b>ncol</b></span>(training)])) &lt;<span class="s5"> </span><span class="s7">0.6</span>*<span class="s3"><b>nrow</b></span>(training)))</p>
+<p class="p6">[1] 100</p>
+<p class="p11"><i># Number of coluns with less than 60% of data</i></p>
+<p class="p6">So, we apply our definition of remove columns that most doesn’t have data, before its apply to the model.</p>
+<p class="p7">Keep &lt;-<span class="s5"> </span><span class="s3"><b>c</b></span>((<span class="s3"><b>colSums</b></span>(!<span class="s3"><b>is.na</b></span>(training[,-<span class="s3"><b>ncol</b></span>(training)])) &gt;=<span class="s5"> </span><span class="s7">0.6</span>*<span class="s3"><b>nrow</b></span>(training)))</p>
+<p class="p7">training <span class="Apple-converted-space">  </span>&lt;-<span class="s5"><span class="Apple-converted-space">  </span></span>training[,Keep]</p>
+<p class="p7">validating &lt;-<span class="s5"> </span>validating[,Keep]</p>
+<h2 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 32.0px Times; color: #333333"><b>Modeling</b></h2>
+<p class="p6">In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally, during the execution. So, we proced with the training the model (Random Forest) with the training data set.</p>
+<p class="p7">model &lt;-<span class="s5"> </span><span class="s3"><b>randomForest</b></span>(classe~.,<span class="s4">data=</span>training)</p>
+<p class="p7"><span class="s3"><b>print</b></span>(model)</p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">## Call:</p>
+<p class="p8">##<span class="Apple-converted-space">  </span>randomForest(formula = classe ~ ., data = training)<span class="Apple-converted-space"> </span></p>
+<p class="p8">##<span class="Apple-converted-space">                </span>Type of random forest: classification</p>
+<p class="p8">##<span class="Apple-converted-space">                      </span>Number of trees: 500</p>
+<p class="p8">## No. of variables tried at each split: 7</p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">## <span class="Apple-converted-space">        </span>OOB estimate of<span class="Apple-converted-space">  </span>error rate: 0.18%</p>
+<p class="p8">## Confusion matrix:</p>
+<p class="p8">##<span class="Apple-converted-space">      </span>A<span class="Apple-converted-space">    </span>B<span class="Apple-converted-space">    </span>C<span class="Apple-converted-space">    </span>D<span class="Apple-converted-space">    </span>E class.error</p>
+<p class="p8">## A 3347<span class="Apple-converted-space">    </span>1<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0 <span class="Apple-converted-space">  </span>0.0002987</p>
+<p class="p8">## B<span class="Apple-converted-space">    </span>2 2276<span class="Apple-converted-space">    </span>1<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0 <span class="Apple-converted-space">  </span>0.0013164</p>
+<p class="p8">## C<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>4 2047<span class="Apple-converted-space">    </span>3<span class="Apple-converted-space">    </span>0 <span class="Apple-converted-space">  </span>0.0034080</p>
+<p class="p8">## D<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>6 1923<span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>0.0036269</p>
+<p class="p8">## E<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>3 2162 <span class="Apple-converted-space">  </span>0.0013857</p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Model Evaluate</b></h3>
+<p class="p6">And proceed with the verification of variable importance measures as produced by random Forest:</p>
+<p class="p10"><b>importance</b><span class="s6">(model)</span></p>
+<p class="p8">##<span class="Apple-converted-space">                      </span>MeanDecreaseGini</p>
+<p class="p8">## user_name <span class="Apple-converted-space">                  </span>9.870e+01</p>
+<p class="p8">## raw_timestamp_part_1<span class="Apple-converted-space">        </span>9.866e+02</p>
+<p class="p8">## raw_timestamp_part_2<span class="Apple-converted-space">        </span>9.933e+00</p>
+<p class="p8">## cvtd_timestamp<span class="Apple-converted-space">              </span>1.358e+03</p>
+<p class="p8">## new_window<span class="Apple-converted-space">                  </span>8.926e-02</p>
+<p class="p8">## num_window<span class="Apple-converted-space">                  </span>5.306e+02</p>
+<p class="p8">## roll_belt <span class="Apple-converted-space">                  </span>5.460e+02</p>
+<p class="p8">## pitch_belt<span class="Apple-converted-space">                  </span>2.988e+02</p>
+<p class="p8">## yaw_belt<span class="Apple-converted-space">                    </span>3.513e+02</p>
+<p class="p8">## total_accel_belt<span class="Apple-converted-space">            </span>1.263e+02</p>
+<p class="p8">## gyros_belt_x<span class="Apple-converted-space">                </span>4.052e+01</p>
+<p class="p8">## gyros_belt_y<span class="Apple-converted-space">                </span>5.171e+01</p>
+<p class="p8">## gyros_belt_z<span class="Apple-converted-space">                </span>1.278e+02</p>
+<p class="p8">## accel_belt_x<span class="Apple-converted-space">                </span>5.780e+01</p>
+<p class="p8">## accel_belt_y<span class="Apple-converted-space">                </span>6.444e+01</p>
+<p class="p8">## accel_belt_z<span class="Apple-converted-space">                </span>1.858e+02</p>
+<p class="p8">## magnet_belt_x <span class="Apple-converted-space">              </span>1.081e+02</p>
+<p class="p8">## magnet_belt_y <span class="Apple-converted-space">              </span>2.101e+02</p>
+<p class="p8">## magnet_belt_z <span class="Apple-converted-space">              </span>1.884e+02</p>
+<p class="p8">## roll_arm<span class="Apple-converted-space">                    </span>1.163e+02</p>
+<p class="p8">## pitch_arm <span class="Apple-converted-space">                  </span>5.445e+01</p>
+<p class="p8">## yaw_arm <span class="Apple-converted-space">                    </span>7.093e+01</p>
+<p class="p8">## total_accel_arm <span class="Apple-converted-space">            </span>3.158e+01</p>
+<p class="p8">## gyros_arm_x <span class="Apple-converted-space">                </span>4.143e+01</p>
+<p class="p8">## gyros_arm_y <span class="Apple-converted-space">                </span>4.144e+01</p>
+<p class="p8">## gyros_arm_z <span class="Apple-converted-space">                </span>1.862e+01</p>
+<p class="p8">## accel_arm_x <span class="Apple-converted-space">                </span>9.662e+01</p>
+<p class="p8">## accel_arm_y <span class="Apple-converted-space">                </span>4.815e+01</p>
+<p class="p8">## accel_arm_z <span class="Apple-converted-space">                </span>3.981e+01</p>
+<p class="p8">## magnet_arm_x<span class="Apple-converted-space">                </span>9.280e+01</p>
+<p class="p8">## magnet_arm_y<span class="Apple-converted-space">                </span>7.552e+01</p>
+<p class="p8">## magnet_arm_z<span class="Apple-converted-space">                </span>5.769e+01</p>
+<p class="p8">## roll_dumbbell <span class="Apple-converted-space">              </span>2.014e+02</p>
+<p class="p8">## pitch_dumbbell<span class="Apple-converted-space">              </span>9.083e+01</p>
+<p class="p8">## yaw_dumbbell<span class="Apple-converted-space">                </span>1.157e+02</p>
+<p class="p8">## total_accel_dumbbell<span class="Apple-converted-space">        </span>1.239e+02</p>
+<p class="p8">## gyros_dumbbell_x<span class="Apple-converted-space">            </span>3.760e+01</p>
+<p class="p8">## gyros_dumbbell_y<span class="Apple-converted-space">            </span>9.397e+01</p>
+<p class="p8">## gyros_dumbbell_z<span class="Apple-converted-space">            </span>2.393e+01</p>
+<p class="p8">## accel_dumbbell_x<span class="Apple-converted-space">            </span>1.152e+02</p>
+<p class="p8">## accel_dumbbell_y<span class="Apple-converted-space">            </span>1.820e+02</p>
+<p class="p8">## accel_dumbbell_z<span class="Apple-converted-space">            </span>1.378e+02</p>
+<p class="p8">## magnet_dumbbell_x <span class="Apple-converted-space">          </span>2.233e+02</p>
+<p class="p8">## magnet_dumbbell_y <span class="Apple-converted-space">          </span>3.229e+02</p>
+<p class="p8">## magnet_dumbbell_z <span class="Apple-converted-space">          </span>2.941e+02</p>
+<p class="p8">## roll_forearm<span class="Apple-converted-space">                </span>2.316e+02</p>
+<p class="p8">## pitch_forearm <span class="Apple-converted-space">              </span>3.041e+02</p>
+<p class="p8">## yaw_forearm <span class="Apple-converted-space">                </span>5.549e+01</p>
+<p class="p8">## total_accel_forearm <span class="Apple-converted-space">        </span>3.126e+01</p>
+<p class="p8">## gyros_forearm_x <span class="Apple-converted-space">            </span>2.414e+01</p>
+<p class="p8">## gyros_forearm_y <span class="Apple-converted-space">            </span>3.601e+01</p>
+<p class="p8">## gyros_forearm_z <span class="Apple-converted-space">            </span>2.404e+01</p>
+<p class="p8">## accel_forearm_x <span class="Apple-converted-space">            </span>1.279e+02</p>
+<p class="p8">## accel_forearm_y <span class="Apple-converted-space">            </span>4.278e+01</p>
+<p class="p8">## accel_forearm_z <span class="Apple-converted-space">            </span>9.758e+01</p>
+<p class="p8">## magnet_forearm_x<span class="Apple-converted-space">            </span>7.772e+01</p>
+<p class="p8">## magnet_forearm_y<span class="Apple-converted-space">            </span>7.428e+01</p>
+<p class="p8">## magnet_forearm_z<span class="Apple-converted-space">            </span>9.364e+01</p>
+<p class="p6">Now we evaluate our model results through confusion Matrix.</p>
+<p class="p7"><span class="s3"><b>confusionMatrix</b></span>(<span class="s3"><b>predict</b></span>(model,<span class="s4">newdata=</span>validating[,-<span class="s3"><b>ncol</b></span>(validating)]),validating$classe)</p>
+<p class="p8">## Confusion Matrix and Statistics</p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">## <span class="Apple-converted-space">          </span>Reference</p>
+<p class="p8">## Prediction<span class="Apple-converted-space">    </span>A<span class="Apple-converted-space">    </span>B<span class="Apple-converted-space">    </span>C<span class="Apple-converted-space">    </span>D<span class="Apple-converted-space">    </span>E</p>
+<p class="p8">##<span class="Apple-converted-space">          </span>A 2232<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0</p>
+<p class="p8">##<span class="Apple-converted-space">          </span>B<span class="Apple-converted-space">    </span>0 1518<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0</p>
+<p class="p8">##<span class="Apple-converted-space">          </span>C<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0 1367<span class="Apple-converted-space">    </span>5<span class="Apple-converted-space">    </span>0</p>
+<p class="p8">##<span class="Apple-converted-space">          </span>D<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>1 1281<span class="Apple-converted-space">    </span>0</p>
+<p class="p8">##<span class="Apple-converted-space">          </span>E<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0<span class="Apple-converted-space">    </span>0 1442</p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">## Overall Statistics</p>
+<p class="p8">##<span class="Apple-converted-space">                                     </span></p>
+<p class="p8">##<span class="Apple-converted-space">                </span>Accuracy : 0.999<span class="Apple-converted-space">     </span></p>
+<p class="p8">##<span class="Apple-converted-space">                  </span>95% CI : (0.998, 1)</p>
+<p class="p8">## <span class="Apple-converted-space">    </span>No Information Rate : 0.284<span class="Apple-converted-space">     </span></p>
+<p class="p8">## <span class="Apple-converted-space">    </span>P-Value [Acc &gt; NIR] : &lt;2e-16 <span class="Apple-converted-space">   </span></p>
+<p class="p8">##<span class="Apple-converted-space">                                     </span></p>
+<p class="p8">## <span class="Apple-converted-space">                  </span>Kappa : 0.999<span class="Apple-converted-space">     </span></p>
+<p class="p8">##<span class="Apple-converted-space">  </span>Mcnemar's Test P-Value : NA <span class="Apple-converted-space">       </span></p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">## Statistics by Class:</p>
+<p class="p8">##<span class="Apple-converted-space"> </span></p>
+<p class="p8">##<span class="Apple-converted-space">                      </span>Class: A Class: B Class: C Class: D Class: E</p>
+<p class="p8">## Sensitivity <span class="Apple-converted-space">            </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>0.999<span class="Apple-converted-space">    </span>0.996<span class="Apple-converted-space">    </span>1.000</p>
+<p class="p8">## Specificity <span class="Apple-converted-space">            </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>0.999<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>1.000</p>
+<p class="p8">## Pos Pred Value<span class="Apple-converted-space">          </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>0.996<span class="Apple-converted-space">    </span>0.999<span class="Apple-converted-space">    </span>1.000</p>
+<p class="p8">## Neg Pred Value<span class="Apple-converted-space">          </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>0.999<span class="Apple-converted-space">    </span>1.000</p>
+<p class="p8">## Prevalence<span class="Apple-converted-space">              </span>0.284<span class="Apple-converted-space">    </span>0.193<span class="Apple-converted-space">    </span>0.174<span class="Apple-converted-space">    </span>0.164<span class="Apple-converted-space">    </span>0.184</p>
+<p class="p8">## Detection Rate<span class="Apple-converted-space">          </span>0.284<span class="Apple-converted-space">    </span>0.193<span class="Apple-converted-space">    </span>0.174<span class="Apple-converted-space">    </span>0.163<span class="Apple-converted-space">    </span>0.184</p>
+<p class="p8">## Detection Prevalence<span class="Apple-converted-space">    </span>0.284<span class="Apple-converted-space">    </span>0.193<span class="Apple-converted-space">    </span>0.175<span class="Apple-converted-space">    </span>0.163<span class="Apple-converted-space">    </span>0.184</p>
+<p class="p8">## Balanced Accuracy <span class="Apple-converted-space">      </span>1.000<span class="Apple-converted-space">    </span>1.000<span class="Apple-converted-space">    </span>0.999<span class="Apple-converted-space">    </span>0.998<span class="Apple-converted-space">    </span>1.000</p>
+<p class="p6">And confirmed the accurancy at validating data set by calculate it with the formula:</p>
+<p class="p7">accurancy&lt;-<span class="s3"><b>c</b></span>(<span class="s3"><b>as.numeric</b></span>(<span class="s3"><b>predict</b></span>(model,<span class="s4">newdata=</span>validating[,-<span class="s3"><b>ncol</b></span>(validating)])==validating$classe))</p>
+<p class="p7">accurancy&lt;-<span class="s3"><b>sum</b></span>(accurancy)*<span class="s7">100</span>/<span class="s3"><b>nrow</b></span>(validating)</p>
+<p class="p6">Model Accuracy as tested over Validation set = <b>99.9235%</b>.</p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 25.0px Times; color: #333333"><b>Model Test</b></h3>
+<p class="p6">Finaly, we prossed with predicting the new values in the testing csv provided, first we apply the same data cleannig operations on it and coerce all columns of Testing data set for the same class of previuos data set.<br>
+#### Gettind Testing Dataset</p>
+<p class="p13"><span class="s6">fileURL &lt;-</span> "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"<span class="s6"><span class="Apple-converted-space"> </span></span></p>
+<p class="p13"><span class="s6">fileSource &lt;-</span>"pml-testing.csv"</p>
+<p class="p7">source_path &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>, fileSource , <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p7">txt_file &lt;-<span class="s5"> </span><span class="s3"><b>paste</b></span>(data_dir, <span class="s5">"/"</span>, fileSource, <span class="s4">sep=</span><span class="s5">""</span>)</p>
+<p class="p12"><br></p>
+<p class="p7"><span class="Apple-converted-space">        </span>if (!<span class="s3"><b>file.exists</b></span>(txt_file)) {</p>
+<p class="p13"><span class="s6"><span class="Apple-converted-space">            </span></span><span class="s3"><b>message</b></span><span class="s6">(</span><span class="s3"><b>paste</b></span><span class="s6">(</span>"Please Wait! Download..."<span class="s6">, fileURL, </span>"..."<span class="s6">));</span></p>
+<p class="p7"><span class="Apple-converted-space">            </span><span class="s3"><b>download.file</b></span>(fileURL, <span class="s4">destfile=</span>source_path);</p>
+<p class="p7"><span class="Apple-converted-space">        </span>}</p>
+<p class="p7">pml_CSV &lt;-<span class="s5"> </span><span class="s3"><b>read.csv</b></span>(txt_file, <span class="s4">header=</span><span class="s3">TRUE</span>, <span class="s4">sep=</span><span class="s5">","</span>, <span class="s4">na.strings=</span><span class="s3"><b>c</b></span>(<span class="s5">"NA"</span>,<span class="s5">""</span>))</p>
+<p class="p12"><br></p>
+<p class="p11"><span class="s6">pml_CSV &lt;-</span><span class="s5"> </span><span class="s6">pml_CSV[,-</span><span class="s7">1</span><span class="s6">] </span><i># Remove the first column that represents a ID Row</i></p>
+<p class="p11"><span class="s6">pml_CSV &lt;-</span><span class="s5"> </span><span class="s6">pml_CSV[ , Keep] </span><i># Keep the same columns of testing dataset</i></p>
+<p class="p7">pml_CSV &lt;-<span class="s5"> </span>pml_CSV[,-<span class="s3"><b>ncol</b></span>(pml_CSV)] <span class="s8"><i># Remove the problem ID</i></span></p>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 18.0px Times; color: #333333"><b>Apply the Same Transformations and Coerce Testing Dataset</b></h4>
+<p class="p11"><i># class_check &lt;- (sapply(pml_CSV, class) == sapply(training, class))</i></p>
+<p class="p11"><i># pml_CSV[, !class_check] &lt;- sapply(pml_CSV[, !class_check], as.numeric)</i></p>
+<p class="p12"><br></p>
+<p class="p11"><i># Coerce testing dataset to same class and strucuture of training dataset<span class="Apple-converted-space"> </span></i></p>
+<p class="p7">testing &lt;-<span class="s5"> </span><span class="s3"><b>rbind</b></span>(training[<span class="s7">100</span>, -<span class="s7">59</span>] , pml_CSV)<span class="Apple-converted-space"> </span></p>
+<p class="p11"><i># Apply the ID Row to row.names and 100 for dummy row from testing dataset<span class="Apple-converted-space"> </span></i></p>
+<p class="p7"><span class="s3"><b>row.names</b></span>(testing) &lt;-<span class="s5"> </span><span class="s3"><b>c</b></span>(<span class="s7">100</span>, <span class="s7">1</span>:<span class="s7">20</span>)</p>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 18.0px Times; color: #333333"><b>Prediciting with Testing Dataset</b></h4>
+<p class="p7">predictions &lt;-<span class="s5"> </span><span class="s3"><b>predict</b></span>(model,<span class="s4">newdata=</span>testing[-<span class="s7">1</span>,])</p>
+<p class="p7"><span class="s3"><b>print</b></span>(predictions)</p>
+<p class="p8">##<span class="Apple-converted-space">  </span>1<span class="Apple-converted-space">  </span>2<span class="Apple-converted-space">  </span>3<span class="Apple-converted-space">  </span>4<span class="Apple-converted-space">  </span>5<span class="Apple-converted-space">  </span>6<span class="Apple-converted-space">  </span>7<span class="Apple-converted-space">  </span>8<span class="Apple-converted-space">  </span>9 10 11 12 13 14 15 16 17 18 19 20<span class="Apple-converted-space"> </span></p>
+<p class="p8">##<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>E<span class="Apple-converted-space">  </span>D<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>C<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>E<span class="Apple-converted-space">  </span>E<span class="Apple-converted-space">  </span>A<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space">  </span>B<span class="Apple-converted-space"> </span></p>
+<p class="p8">## Levels: A B C D E</p>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 18.0px Times; color: #333333"><b>Generating Answers Files to Submit for Assignment</b></h4>
+<p class="p6">The following function to create the files to answers the Prediction Assignment Submission:</p>
+<p class="p7">pml_write_files =<span class="s5"> </span>function(x){</p>
+<p class="p7"><span class="Apple-converted-space">  </span>n =<span class="s5"> </span><span class="s3"><b>length</b></span>(x)</p>
+<p class="p7"><span class="Apple-converted-space">  </span>for(i in <span class="s7">1</span>:n){</p>
+<p class="p13"><span class="s6"><span class="Apple-converted-space">    </span>filename =</span> <span class="s3"><b>paste0</b></span><span class="s6">(</span>"./answers/problem_id_"<span class="s6">,i,</span>".txt"<span class="s6">)</span></p>
+<p class="p14"><span class="s6"><span class="Apple-converted-space">    </span></span><span class="s3"><b>write.table</b></span><span class="s6">(x[i],</span>file=<span class="s6">filename,</span>quote=<span class="s3">FALSE</span><span class="s6">,</span>row.names=<span class="s3">FALSE</span><span class="s6">,</span>col.names=<span class="s3">FALSE</span><span class="s6">)</span></p>
+<p class="p7"><span class="Apple-converted-space">  </span>}</p>
+<p class="p7">}</p>
+<p class="p12"><br></p>
+<p class="p10"><b>pml_write_files</b><span class="s6">(predictions)</span></p>
+<p class="p6">Since the greatest accuracy level of our modelo, as expect, all 20th files answers submitted were correct!</p>
+</body>
+</html>
